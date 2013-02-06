@@ -19,19 +19,11 @@ class BillCorpus(object):
 
 if __name__ == '__main__':
     # First obtain documents to test
-    bills = Bill.objects.all()[20000:30000]
+    bills = Bill.objects.all()
     documents = bills.values_list('title', flat=True)
 
     # Load into gensim dictionary object
     dictionary = corpora.Dictionary(line.lower().split() for line in documents)
-
-    # Filtering, stopword removal and other cleaning happens here. In this case, we're only
-    # removing words that occur just once, but there's a lot more that could be done.
-    #once_ids = [tokenid for tokenid, docfreq in dictionary.dfs.iteritems() if docfreq == 1]
-    #dictionary.filter_tokens(once_ids)
-
-    # Compact dictionary
-    dictionary.compactify()
 
     # Now create corpus and tfidf model
     bc = BillCorpus(documents, dictionary)
@@ -39,7 +31,7 @@ if __name__ == '__main__':
 
     G = nx.Graph() # Prep the networkX graph for later
 
-    #Create and iterate over the similarity matrix
+    # Create and iterate over the similarity matrix
     index = Similarity(corpus=tfidf[bc], num_features=tfidf.num_nnz, output_prefix="shard")
     for i in enumerate(index):
         # Get the ids of values in each row that have cosine similarity > 0.7
