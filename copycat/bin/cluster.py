@@ -71,4 +71,4 @@ if __name__ == '__main__':
                     G.add_edge(a.title, b.title)
 
     # Write matches to a graphml file for processing in Gephi
-    nx.write_graphml(G, 'kgraph.graphml')
+    nx.write_graphml(G, 'output/kgraph%s.graphml' % K_CLUSTERS)
