@@ -2,6 +2,8 @@ import logging
 import os
 import django
 
+SUNLIGHT_API_KEY = ''
+
 # Context processors
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
