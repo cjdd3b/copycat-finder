@@ -41,8 +41,7 @@ if __name__ == '__main__':
     # Execute minibatch k-means on the tf-idf vectors. Using minibatch because it runs
     # orders of magnitude faster than traditional k-means, at the expense of a little precision
     print '---------- Forming %s initial clusters ----------' % K_CLUSTERS
-    km = MiniBatchKMeans(n_clusters=K_CLUSTERS, init='k-means++', n_init=1,
-        compute_labels=True)
+    km = MiniBatchKMeans(n_clusters=K_CLUSTERS, init='k-means++', n_init=1, compute_labels=True)
     km_results = km.fit(X_train_tf)
 
     G = nx.Graph() # Prep the networkX graph for later
@@ -66,9 +65,11 @@ if __name__ == '__main__':
         for i in enumerate(index):
             for j in numpy.nonzero(i[1] > 0.7)[0]:
                 id1, id2 = id_hash[id_hash.keys()[i[0]]], id_hash[id_hash.keys()[j]]
-                a, b = bills[id1], bills[id2]
-                if a.state <> b.state:
-                    G.add_edge(a.title, b.title)
+                bill1, bill2 = bills[id1], bills[id2]
+                if bill1.state <> bill2.state:
+                    G.add_node(bill1.title, state=bill1.state.name, session=bill1.session.name, id=bill1.bill_id)
+                    G.add_node(bill2.title, state=bill2.state.name, session=bill2.session.name, id=bill2.bill_id)
+                    G.add_edge(bill1.title, bill2.title)
 
     # Write matches to a graphml file for processing in Gephi
     nx.write_graphml(G, 'output/kgraph%s.graphml' % K_CLUSTERS)
