@@ -9,7 +9,7 @@ from apps.bills.models import Bill
 
 ########## CONSTANTS ##########
 
-K_CLUSTERS = 20
+K_CLUSTERS = 25
 
 ########## CLASSES ##########
 
