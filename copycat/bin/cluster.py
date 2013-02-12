@@ -53,7 +53,7 @@ if __name__ == '__main__':
         bill_ids = numpy.where(km_results.labels_ == i)[0]
         clustertext = [billtext[id] for id in bill_ids]
 
-        print '---------- Processing cluster %s of %s (%s items) ----------' % (i + 1, K_CLUSTERS, len(text))
+        print '---------- Processing cluster %s of %s (%s items) ----------' % (i + 1, K_CLUSTERS, len(clustertext))
 
         # Load titles into gensim dictionary object
         dictionary = corpora.Dictionary(line.lower().split() for line in clustertext)
