@@ -1,7 +1,7 @@
 Copycat Finder
 ==============
 
-This project is an early attempt ad identifying model legislation and other copycat bills that appear over time in multiple state legislatures.
+This project is an early attempt at identifying model legislation and other copycat bills that appear over time in multiple state legislatures.
 
 In its current form, the code is designed mainly to prove that pairwise text comparison is possible at sufficient scale to compare all state legislation at once. As such, the analysis here **only deals with bill titles, not full bill text**. The main reason for that is practical: Sunlight's [OpenStates project](http://openstates.org/), the data source for this project, does not index full bill text. Scraping and cleaning bill text from 50 states is another can of worms. Still, the methods used here for comparing bill titles should be able to apply to full bill text with little to no modification.
 
