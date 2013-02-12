@@ -27,9 +27,9 @@ class BillCorpus(object):
 if __name__ == '__main__':
     # Get the bills and bill text from the database. Also force early evaluation of
     # the queryset so its contents can be accessed without database queries later.
-    bills = list(Bill.objects.all())[:100000]
-    billtext = Bill.objects.all().values_list('title', flat=True)[:100000]
-
+    bills = list(Bill.objects.all())
+    billtext = Bill.objects.all().values_list('title', flat=True)
+    
     # Get word counts for bill titles
     count_vect = CountVectorizer()
     X_train_counts = count_vect.fit_transform(billtext)
