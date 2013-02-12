@@ -11,7 +11,7 @@ Pairwise document comparison at scale is a tricky problem. Executed naively (usi
 
 My early attempts to solve this problem relied on raw computing muscle, using a number of servers running a parallel [map-reduce workflow](https://github.com/cjdd3b/pairwise-mapreduce) developed by researchers at the University of Maryland. That worked fine, but it was inelegant, costly and difficult to spin up.
 
-The approach used in this project fixes those problems by using a three-step workflow that can execute millions of comparisons in reasonable time on an individual laptop. After preprocessing, the workflow first uses [k-means clustering](http://en.wikipedia.org/wiki/K-means_clustering) to break the problem into smaller subproblems, then relies on Python's [Gensim](http://radimrehurek.com/gensim/) library to construct large similarity matrices using disk space rather than RAM. Finally, the cosine distance bewtween the tf-idf vectors of title pairs is used to determine similarity, with all groups of bills having similarity in excess of a given threshold being linked together.
+The approach used in this project fixes those problems by using a three-step workflow that can execute millions of comparisons in reasonable time on an individual machine. After preprocessing, the workflow first uses [k-means clustering](http://en.wikipedia.org/wiki/K-means_clustering) to break the problem into smaller subproblems, then relies on Python's [Gensim](http://radimrehurek.com/gensim/) library to construct large similarity matrices using disk space rather than RAM. Finally, the cosine distance bewtween the tf-idf vectors of title pairs is used to determine similarity, with all groups of bills having similarity in excess of a given threshold being linked together.
 
 Processing the attached dataset of almost 400,000 bill titles takes about an hour on a Macbook Air. More detail on each step follows:
 
@@ -39,7 +39,7 @@ The results of this analysis are admittedly very rough, but they also form the b
 
 Using the parameters outlined above, the analysis revealed 1,920 clusters of similar bill titles, encompassing more than 5,000 bills in total. Owing to the limitations of using only bill titles in the analysis, many of those clusters were extremely vague and most likely don't refer to the same legislation at all (think bills with vague titles like "Relating to Public Employees"). But the analysis still seems to capture hundreds, if not thousands, of apparent model bills crafted by business and ideological groups.
 
-Potential: Legislative ideologies; evolution of laws covering new national issues;
+![All campaign contributions](https://f.cloud.github.com/assets/947791/150540/da206fba-7554-11e2-9e6b-27dc713b9554.png)
 
 The bills suggest potential narratives about model legislation and influence, but also topics such as ideological differences between the states and the evolution of laws covering new national or regional issues. Based on a very quick (and incomplete) read of the results, here are a few interesting finds:
 
