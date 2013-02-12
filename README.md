@@ -1,7 +1,7 @@
 Copycat Finder
 ==============
 
-This project identifies model legislation and other copycat bills that appear in multiple state legislatures.
+This project identifies model legislation and other copycat bills that appear over time in multiple state legislatures.
 
 In its current form, the code is designed mainly to prove that pairwise text comparison is possible at sufficient scale to compare all state legislation at once. As such, the analysis here **only deals with bill titles, not full bill text**. The main reason for that is practical: Sunlight's [OpenStates project](http://openstates.org/), the data source for this project, does not index full bill text. Scraping and cleaning bill text from 50 states is another can of worms. Still, the methods used here for comparing bill titles should be able to apply to full bill text with little to no modification.
 
@@ -25,21 +25,21 @@ I tried several different numbers of clusters for the processing step but ultima
 
 ### Disk storage vs. RAM
 
-Once the initial document set is split into clusters, the program then constructs pairwise similarity matrix from each cluster one at a time. That said, some of the groups that k-means returns still contain upwards of 100,000 documents, so those similarity matrices are still pretty big.
+Once the initial document set is split into clusters, the program then constructs pairwise similarity matrices from each cluster one at a time. That said, some of the groups that k-means returns still contain upwards of 100,000 documents, so those similarity matrices are still pretty big.
 
 That's where [Gensim](http://radimrehurek.com/gensim/) comes in. Among many other useful things, Gensim is ingeniously structured to shard large similarity matrices to the hard disk rather than trying to store them in memory. It comes at the cost of speed, but it enables brute force pairwise comparisons without resorting to clever algorithmic tricks or heuristics that might make for less precise results.
 
 ### The comparisons themselves
 
-The comparisons themselves aren't based on anything especially interesting. Bills are compared in a standard way using [cosine similarity](http://en.wikipedia.org/wiki/Cosine_similarity) between their [tf-idf](http://en.wikipedia.org/wiki/Tf%E2%80%93idf) vectors, yielding a score between -1 and 1. In this example, two documents with a similarity of at least 0.7 are considered similar, although that number could easily be adjusted to be more or less permissive.
+The comparisons themselves aren't especially slever. Bills are compared in a standard way using [cosine similarity](http://en.wikipedia.org/wiki/Cosine_similarity) between their [tf-idf](http://en.wikipedia.org/wiki/Tf%E2%80%93idf) vectors, yielding a score between -1 and 1. In this example, two documents with a similarity of at least 0.7 are considered similar, although that number could easily be adjusted to be more or less permissive.
 
 ## Results
 
 The results of this analysis are admittedly very rough, but they also form the beginnings of what could be a first-of-its-kind look at federalism in practice.
 
-Using the parameters outlined above, the analysis revealed 1,920 clusters of similar bill titles, encompassing more than 5,000 bills in total. Owing to the limitations of using only bill titles in the analysis, many of those clusters were extremely vague and most likely don't refer to the same legislation at all (think bills with vague titles like "Relating to Public Employees"). But the analysis still seems to capture hundreds, if not thousands, of apparent model bills crafted by business and ideological groups.
+Using the parameters outlined above, the analysis revealed 1,920 clusters of similar bill titles, encompassing more than 5,000 bills in total. Owing to the limitations of using only bill titles in the analysis, some of those clusters were extremely vague and most likely don't refer to the same legislation at all (think bills with vague titles like "Relating to Public Employees"). But the analysis still seems to capture hundreds, if not thousands, of apparent model bills crafted by business and ideological groups.
 
-![All campaign contributions](https://f.cloud.github.com/assets/947791/150540/da206fba-7554-11e2-9e6b-27dc713b9554.png)
+![All bill groupings](https://f.cloud.github.com/assets/947791/150540/da206fba-7554-11e2-9e6b-27dc713b9554.png)
 
 The bills suggest potential narratives about model legislation and influence, but also topics such as ideological differences between the states and the evolution of laws covering new national or regional issues. Based on a very quick (and incomplete) read of the results, here are a few interesting finds:
 
@@ -53,9 +53,9 @@ The bills suggest potential narratives about model legislation and influence, bu
 
 ## Next steps
 
-As I said above, these early efforts are admittedly rough and are meant only to demonstrate the viability of this technique and the journalistic potential of its results.
+As I said above, these early efforts are admittedly rough and are meant only to demonstrate the viability of this technique and the high-level journalistic potential of its results.
 
-All in all, I'm satisfied that the method outlined here is effective, but it still needs to be refined. Some simple and obvious next steps might include processing text to cut out things like non-alphanumeric characters; adjusting the document similarity score to see how it affects results; and optimizing the number of clusters for k-means, using techniques such as the [Elbow Method](http://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set) to ensure bills are clustered properly. 
+The method definitely needs to be refined. Some simple and obvious next steps might include processing text to cut out things like non-alphanumeric characters; adjusting the document similarity score to see how it affects results; and optimizing the number of clusters for k-means, using techniques such as the [Elbow Method](http://en.wikipedia.org/wiki/Determining_the_number_of_clusters_in_a_data_set) to ensure bills are clustered properly. 
 
 Beyond that, I would love to extend the analysis beyond bill titles to the full text of the legislation itself. Looking only at bill titles makes it possible to find some legislative trends, but ideally the approach would be much more granular -- looking at complete bill text tokenized into sections or even sentences. Not only would that approach reveal model legislation that might not be identified by titles alone, but it could also reveal common language inserted into completely different bills, possibly crafted by lobbyists and disseminated across multiple states.
 
