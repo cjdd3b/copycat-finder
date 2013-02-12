@@ -14,6 +14,10 @@ K_CLUSTERS = 25
 ########## CLASSES ##########
 
 class BillCorpus(object):
+    '''
+    An iterator that prevents the whole corpus from being loaded into
+    memory at once.
+    '''
     def __init__(self, texts, dict):
         self.texts = texts
         self.dict = dict
@@ -29,7 +33,7 @@ if __name__ == '__main__':
     # the queryset so its contents can be accessed without database queries later.
     bills = list(Bill.objects.all())
     billtext = Bill.objects.all().values_list('title', flat=True)
-    
+
     # Get word counts for bill titles
     count_vect = CountVectorizer()
     X_train_counts = count_vect.fit_transform(billtext)
@@ -65,9 +69,13 @@ if __name__ == '__main__':
         # Create and iterate over the similarity matrix
         index = Similarity(corpus=tfidf[bc], num_features=tfidf.num_nnz, output_prefix="shard")
         for i in enumerate(index):
+            # For every similarity score > 0.7
             for j in numpy.nonzero(i[1] > 0.7)[0]:
+                # Get the proper bill objects
                 id1, id2 = bill_ids[[i[0]]], bill_ids[j]
                 bill1, bill2 = bills[id1], bills[id2]
+                # If the bills are from different states, add two nodes and connect them in the graph we initialized earlier.
+                # These nodes and edges will denote similar bills in a graph structure, which we can visualize and analyze later.
                 if bill1.state <> bill2.state:
                     G.add_node(bill1.title, state=bill1.state.name, session=bill1.session.name, bill_id=bill1.bill_id)
                     G.add_node(bill2.title, state=bill2.state.name, session=bill2.session.name, bill_id=bill2.bill_id)

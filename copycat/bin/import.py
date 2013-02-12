@@ -7,6 +7,11 @@ from apps.bills.models import *
 ########## HELPER FUNCTIONS ##########
 
 def unzip(url):
+    '''
+    Function to unzip incoming zip files in memory rather than
+    processing them on the disk. Helps beacuse the incoming bill
+    files are stored as zips.
+    '''
     zipdata = StringIO()
     zipdata.write(urllib2.urlopen(url).read())
     myzipfile = zipfile.ZipFile(zipdata)
@@ -17,6 +22,9 @@ def unzip(url):
 
 
 def get_csvs():
+    '''
+    Gets all the links of state-level bill CSVs from the OpenStates site.
+    '''
     html = urllib2.urlopen('http://openstates.org/downloads/').read()
     soup = BeautifulSoup(html)
 
@@ -31,10 +39,12 @@ def get_csvs():
 ########## MAIN ##########
 
 if __name__ == '__main__':
+    # Go through all the states
     for url in get_csvs():
         print url
 
         bills = []
+        # Create the corresponding bill object in the database
         raw_data = csv.DictReader(unzip(url), delimiter=',', quotechar='"')
         for row in raw_data:
             state, created = State.objects.get_or_create(name=row['state'])
@@ -43,7 +53,9 @@ if __name__ == '__main__':
             session, created = Session.objects.get_or_create(name=row['session'])
             if created: session.save()
 
+            # Still need to fill in things like created date and updated date here.
             bill = Bill(state=state, session=session, bill_id=row['bill_id'], title=row['title'])
             bills.append(bill)
 
+        # Bulk create to save time on transactions
         Bill.objects.bulk_create(bills)
