@@ -31,7 +31,7 @@ That's where [Gensim](http://radimrehurek.com/gensim/) comes in. Among many othe
 
 ### The comparisons themselves
 
-The comparisons themselves aren't especially slever. Bills are compared in a standard way using [cosine similarity](http://en.wikipedia.org/wiki/Cosine_similarity) between their [tf-idf](http://en.wikipedia.org/wiki/Tf%E2%80%93idf) vectors, yielding a score between -1 and 1. In this example, two documents with a similarity of at least 0.7 are considered similar, although that number could easily be adjusted to be more or less permissive.
+The comparisons themselves aren't especially clever. Bills are compared in a standard way using [cosine similarity](http://en.wikipedia.org/wiki/Cosine_similarity) between their [tf-idf](http://en.wikipedia.org/wiki/Tf%E2%80%93idf) vectors, yielding a score between -1 and 1. In this example, two documents with a similarity of at least 0.7 are considered similar, although that number could easily be adjusted to be more or less permissive.
 
 ## Results
 
