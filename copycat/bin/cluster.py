@@ -10,7 +10,7 @@ from apps.bills.models import Bill
 ########## CONSTANTS ##########
 
 # The number of initial buckets into which the titles are split
-K_CLUSTERS = 25
+K_CLUSTERS = 10
 
 # The cosine similarity score required for two bill titles to be considered
 # similar. Should be between -1.0 and 1.0.
@@ -88,7 +88,7 @@ if __name__ == '__main__':
                 # Get the proper bill objects from our data structures above
                 id1, id2 = bill_ids[[i[0]]], bill_ids[j]
                 bill1, bill2 = bills[id1], bills[id2]
-                
+
                 # If the bills are from different states, add two nodes and connect them in the graph we initialized earlier.
                 # These nodes and edges will denote similar bills in a graph structure, which we can visualize and analyze later.
                 if bill1.state <> bill2.state:
